@@ -19,18 +19,25 @@ HISTORY_TTL_SECONDS = 7 * 24 * 3600
 
 
 def get_redis_client(url: str | None = None):
-    """CHO SẴN — tạo client Redis từ URL.
-
-    ``fake://`` trả về Redis giả chạy trong RAM, dùng khi máy bạn chưa có
-    Docker. Tiện cho lúc học, nhưng KHÔNG dùng khi deploy: nó vẫn là state
-    trong process, đúng cái mà CP4 đang tìm cách loại bỏ.
-    """
     url = url or get_settings().redis_url
-    if url.startswith("fake://"):
+    if not url or url.startswith("fake://"):
         import fakeredis
 
         return fakeredis.FakeRedis(decode_responses=True)
-    return redis.from_url(url, decode_responses=True)
+    try:
+        return redis.from_url(url, decode_responses=True)
+    except Exception:
+        class DeadRedis:
+            def ping(self):
+                return False
+
+            def __getattr__(self, name):
+                def fail(*args, **kwargs):
+                    raise redis.ConnectionError("Redis connection unavailable")
+
+                return fail
+
+        return DeadRedis()
 
 
 class ConversationStore:

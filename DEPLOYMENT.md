@@ -18,7 +18,7 @@
 
 | Mục | Nội dung |
 |-----|----------|
-| Public URL | https://k4-l3b-day12-dangquanghung.up.railway.app |
+| Public URL | https://day12-agent-production-1774.up.railway.app |
 | Platform | Railway |
 | Ngày deploy | 2026-09-29 |
 
