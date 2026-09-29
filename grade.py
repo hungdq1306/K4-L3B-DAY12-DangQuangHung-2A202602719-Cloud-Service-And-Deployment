@@ -101,6 +101,8 @@ def grade_exercises() -> tuple[int, Path | None]:
 
 
 def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     print("=" * 74)
     print("CHẤM ĐIỂM TỰ ĐỘNG — K4 LEVEL 3B, NGÀY 12: HẠ TẦNG CLOUD & DEPLOYMENT")
     print("=" * 74)
